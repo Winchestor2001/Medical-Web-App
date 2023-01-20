@@ -1,0 +1,134 @@
+{% extends 'base.html' %} 
+
+{% block title %}Grafik tuzish{% endblock %} 
+
+
+{% block content %}
+
+<div class="container container-sm">
+  <div class="row mt-3">
+    <div class="col-lg-3 border-end">
+      <ul class="list-group main-color fw-bold">
+        <li class="list-group text-center text-light p-2 h4 fw-bold">
+          Ishchilar
+        </li>
+        {% for doctor in doctors %}
+        <li class="list-group-item doctors_list">
+          <input class="form-check-input me-1" type="checkbox" id="ishchi" />
+          <label class="form-check-label" for="firstCheckbox">
+            <details>
+              <summary>{{ doctor.full_name }}</summary>
+              <ul class="list-group fw-light list-group-flush">
+                {% for staff in staffs %} 
+                {% if staff.doctor.full_name == doctor.full_name %}
+                <li class="list-group-item">{{ staff.full_name }}</li>
+                {% endif %} 
+                {% endfor %}
+              </ul>
+            </details>
+          </label>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-lg-9">
+      <div class="d-flex justify-content-between flex-wrap mt-5 mt-lg-0">
+        <div class="d-flex">
+          <div class="custom-dropdown big main-color">
+            <select id="select">
+              <option selected disabled>MFI</option>
+              {% for neighborhood in neighborhoods %}    
+                <option>{{ neighborhood.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="custom-dropdown big main-color">
+          <select id="select2">    
+              <!-- pass -->
+              <option selected disabled>Ko'chalar</option>
+          </select>
+      </div>
+        </div>
+        <button id="save_grafic" class="btn btn-success m-2 m-md-0 m-sm-0">Saqlash</button>
+      </div>
+      <table class="table table-striped mt-5">
+        <thead>
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">F.I.O</th>
+            <th scope="col">Address</th>
+            <th scope="col">Tel.raqam</th>
+          </tr>
+        </thead>
+        <tbody class="address">
+          <!-- pass -->
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  function makeStreetDropdown(data){
+    let street = document.querySelector('#select2');
+    let context = '';
+    for (let i = 0; i < data.length; i++) {
+      context += `<option>${data[i].fields.name}</option>`
+    }
+    street.innerHTML = context
+  }
+  function makeAddressDropdown(data){
+    let address = document.querySelector('.address');
+    let context = '';
+    for (let i = 0; i < data.length; i++) {
+      context += `<tr>
+              <th scope="row">${i+1}</th>
+              <td>${data[i].fields.full_name}</td>
+              <td>${data[i].fields.addres_name}</td>
+              <td>${data[i].fields.phone_number}</td>
+            </tr>`
+    }
+    address.innerHTML = context
+  }
+  function getStreets(e) {
+    console.log(e.target);
+    $.ajax({
+      url: "{% url 'get_streets' %}",
+      type: "get",
+      data: { item: e },
+      success: function (data) {
+        makeStreetDropdown(data)
+      },
+    });
+  }
+  function getAddress(e) {
+    $.ajax({
+      url: "{% url 'get_address' %}",
+      type: "get",
+      data: { item: e },
+      success: function (data) {
+        makeAddressDropdown(data)
+      },
+    });
+  }
+
+  save_grafic.addEventListener('click', (e) => {
+    neighborhood = areaSelect.value
+    street = areaSelect2.value
+    doctors_list.forEach((item) => {
+        if (item.childNodes[1].checked) {            
+            doctor = item.childNodes[3].childNodes[1].childNodes[1].textContent
+            $.ajax({
+              url: "{% url 'save_grafic' %}",
+              type: "get",
+              data: { doctor: doctor, neighborhood: neighborhood, street: street },
+              success: function (data) {
+                console.log(data);
+              },
+            })
+        }
+    });
+});
+</script>
+{% endblock %}

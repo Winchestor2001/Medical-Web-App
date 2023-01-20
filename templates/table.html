@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Jadval{% endblock %}
+
+
+
+
+
+{% block content %}
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">
+            Tastiqlash oynasi
+          </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <button class="btn btn-primary mb-3" type="button">Sms kodini yuborish</button>
+            <input class="form-control" type="text" placeholder="Sms kodini kiriting">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-success">Tastiqlash</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<div class="container">
+  {% for work in works_day %}
+  {{work.date | date:'l'}}
+  {% endfor %}
+    <h2 class="btn btn-primary fw-bold mt-3">02.01.2023 -> 16.01.2023</h2>
+    <div class="d-flex flex-wrap justify-content-center justify-content-lg-start week mt-2">
+      <div class="day">
+        <h3 class="main-color text-center text-light p-2">Dushanba</h3>
+        <ul class="fw-bold">
+          <li class="list-group-item m-2  btn honadon-kirmadi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            2 mik-6 dom-12 kvartira
+          </li>
+          <li class="list-group-item m-2 btn honadon-kirmadi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Navoi kucha 2-uy
+          </li>
+          <li class="list-group-item m-2 btn honadon-kirdi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Alisher Navoi kucha 122-uy
+          </li>
+          <li class="list-group-item m-2  btn honadon-kirdi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Navoi kucha 52-uy
+          </li>
+          <li class="list-group-item m-2 btn honadon-kirmadi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Alisher Navoi kucha 22-uy
+          </li>
+        </ul>
+      </div>
+      <div class="day">
+        <h3 class="main-color text-center text-light p-2">Seyshanba</h3>
+        <ul class="fw-bold">
+          <li class="list-group-item m-2 btn honadon-kirdi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Navoi kucha 2-uy
+          </li>
+          <li class="list-group-item m-2 btn honadon-kirmadi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Alisher Navoi kucha 22-uy
+          </li>
+          <li class="list-group-item m-2 btn honadon-kirdi text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Navoi kucha 52-uy
+          </li>
+          <li class="list-group-item m-2 btn honadon-kirdi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Alisher Navoi kucha 122-uy
+          </li>
+          <li class="list-group-item m-2 btn honadon-kirmadi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Alisher Navoi kucha 22-uy
+          </li>
+          <li class="list-group-item m-2 btn honadon-kirdi text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            2 mik-6 dom-12 kvartira
+          </li>
+        </ul>
+      </div>
+      <div class="day">
+        <h3 class="main-color text-center text-light p-2">Chorshanba</h3>
+        <ul class="fw-bold">
+          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Navoi kucha 2-uy
+          </li>
+          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Alisher Navoi kucha 22-uy
+          </li>
+          <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Navoi kucha 52-uy
+          </li>
+          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Alisher Navoi kucha 122-uy
+          </li>
+          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Alisher Navoi kucha 22-uy
+          </li>
+          <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            2 mik-6 dom-12 kvartira
+          </li>
+        </ul>
+      </div>
+      <div class="day">
+        <h3 class="main-color text-center text-light p-2">Chorshanba</h3>
+        <ul class="fw-bold">
+          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Navoi kucha 2-uy
+          </li>
+          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Alisher Navoi kucha 22-uy
+          </li>
+          <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Navoi kucha 52-uy
+          </li>
+<li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Alisher Navoi kucha 122-uy
+  </li>
+  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Alisher Navoi kucha 22-uy
+  </li>
+  <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    2 mik-6 dom-12 kvartira
+  </li>
+</ul>
+</div>
+<div class="day">
+<h3 class="main-color text-center text-light p-2">Chorshanba</h3>
+<ul class="fw-bold">
+  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Navoi kucha 2-uy
+  </li>
+  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Alisher Navoi kucha 22-uy
+  </li>
+  <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Navoi kucha 52-uy
+  </li>
+  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Alisher Navoi kucha 122-uy
+  </li>
+  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Alisher Navoi kucha 22-uy
+  </li>
+  <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    2 mik-6 dom-12 kvartira
+  </li>
+</ul>
+</div>
+<div class="day">
+<h3 class="main-color text-center text-light p-2">Chorshanba</h3>
+<ul class="fw-bold">
+  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Navoi kucha 2-uy
+  </li>
+  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Alisher Navoi kucha 22-uy
+  </li>
+  <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Navoi kucha 52-uy
+  </li>
+  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Alisher Navoi kucha 122-uy
+  </li>
+  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Alisher Navoi kucha 22-uy
+  </li>
+  <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    2 mik-6 dom-12 kvartira
+  </li>
+</ul>
+</div>
+</div>
+</div>
+
+{% endblock %}
