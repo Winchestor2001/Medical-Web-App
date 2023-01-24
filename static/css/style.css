@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 
+
 .main-color{
   background-color: #27384c;
 }
@@ -20,7 +21,9 @@
   color: white;
   font-weight: bold;
 }
-
+.logo{
+  max-width: 120px;
+}
 .list{
   list-style: none;
   display: flex;
@@ -84,6 +87,9 @@ i{
   text-indent: 0.01px;
   text-overflow: '';
 }
+
+
+
 
 
 
@@ -154,7 +160,7 @@ i{
   font-weight: bold;
 
 }
-.login_form input{
+.login_input{
   display: block;
   height: 50px;
   width: 100%;
@@ -163,7 +169,8 @@ i{
   padding: 0 10px;
   margin-top: 8px;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 500;
+  color: #333;
 }
 ::placeholder{
   color: #f09819;
@@ -181,10 +188,18 @@ i{
   cursor: pointer;
 }
 
-
-
+.date-input{
+  border-radius: 7px;
+  border: 2.6px solid #27384c;
+  color: #27384c;
+  height: 40px;
+  padding: 5px;
+}
+.date-input:focus{
+  box-shadow: 1px 1px 10px 1px #145fc1;
+}
 /* MEDIA */
-@media screen and (max-width:600px){
+@media screen and (max-width:768px){
   .menu{
       width: 100%;
       max-height: 0;
@@ -214,4 +229,15 @@ i{
 .login_form button{
     margin-top: 10px;
   }
+}
+
+@media screen and (max-width:600px) {
+  .year2023{
+    height: 80vh !important;
+  }
+}
+
+/* /////////////////// ADRESS WORK ///////////////////// */
+ i{
+  color: black;
 }

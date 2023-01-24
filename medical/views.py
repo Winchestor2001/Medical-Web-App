@@ -4,12 +4,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import *
 from django.core import serializers
-from datetime import timedelta
+from .utils import get_now_month
 
 
 @login_required(login_url='login')
 def create_graphic(request):
-    doctors = Doctor.objects.all()
     staffs = Staff.objects.all()
     neighborhoods = Neighborhood.objects.all()
     streets = Street.objects.all()
@@ -19,25 +18,20 @@ def create_graphic(request):
         'neighborhoods': neighborhoods,
         'streets': streets,
         'addresses': addresses,
-        'doctors': doctors,
         }
     return render(request, 'create_graphic.html', context)
 
 
 @login_required
 def table_page(request):
-    user = request.user
-    user_id = request.user.id
-    works_day = Work.objects.filter(doctor__user=user)
-    if not works_day.exists():
-        works_day = Work.objects.filter(staff=user_id)
-    # print(works_day)
-    context = {'works_day': works_day}
-    
-    for i in works_day:
-        d = i.date
-        print(d + timedelta.days(7))
-    return render(request, 'table.html', context)
+    return render(request, 'table.html')
+
+
+def get_user_table_works(request):
+    user = request.GET.get('req')
+    works_day = Work.objects.filter(staff__user__username=user)
+    data = serializers.serialize('json', works_day)
+    return HttpResponse(data, content_type="application/json")
 
 
 def get_streets(reuqest):
@@ -48,30 +42,45 @@ def get_streets(reuqest):
 
 
 def get_address(reuqest):
-    item = reuqest.GET.get("item").strip()
-    address = Address.objects.filter(street__name=item)
+    item = reuqest.GET.getlist("item[]")
+    address = Address.objects.filter(street__slug__in=item)
+    print(address)
     data = serializers.serialize('json', address)
     return HttpResponse(data, content_type="application/json")
 
 
 def save_grafic(request):
-    doctor = request.GET.get("doctor")
-    neighborhood = request.GET.get("neighborhood")
-    street = request.GET.get("street")
-    doctor = Doctor.objects.get(full_name=doctor)
-    neighborhood = Neighborhood.objects.get(name=neighborhood)
-    street = Street.objects.filter(neighborhood=neighborhood)
-    staffs = Staff.objects.filter(doctor__full_name=doctor)
-    work = Work(
-        doctor=doctor,
-        neighborhood=neighborhood,
-    )
-    work.save()
-    for i in staffs.values():
-        work.staff.add(i['id'])
-    for i in street.values():
-        work.street.add(i['id'])
+    staff = request.GET.get("staff")
+    date = request.GET.get("date")
+    address = request.GET.getlist("addresses[]")
+    staff = Staff.objects.get(full_name=staff)
+    for addr in address:
+        address = Address.objects.get(pk=int(addr))
+        Work.objects.create(
+            staff=staff,
+            address=address,
+            date=date
+        )
     return HttpResponse('True')
+
+
+def adresses_work(request):
+    works = Work.objects.filter(staff__user=request.user)
+    context = {'addresses': works}
+    return render(request, 'adresses_work.html', context)
+
+
+def jadval(request):
+    staffs = Staff.objects.all()
+    works = []
+    for s in staffs:
+        w = Work.objects.filter(staff__user=s.user)
+        if w.exists():
+            works.append(w)
+    print(works)
+    # works = Work.objects.all()
+    context = {'works': works}
+    return render(request, 'jadval.html', context)
 
 
 def login_page(request):
@@ -82,7 +91,7 @@ def login_page(request):
         usr = authenticate(username=uname, password=pwd)
         if usr:
             login(request, usr)
-            return redirect('create_graphic')
+            return redirect('table')
         else:
             context['message'] = 'username yoki parol xato!!!'
             context['col'] = 'danger'

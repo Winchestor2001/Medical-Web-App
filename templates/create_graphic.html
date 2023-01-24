@@ -5,6 +5,13 @@
 
 {% block content %}
 
+<div class="d-flex justify-content-center w-100">
+  <div id="alert" class="d-none alert alert-primary position-fixed  p-3 mt-2 " style="z-index: 100; width: 300px">
+    <p class="text-center alert_text"></p>
+  </div>
+</div>
+
+
 <div class="container container-sm">
   <div class="row mt-3">
     <div class="col-lg-3 border-end">
@@ -12,48 +19,56 @@
         <li class="list-group text-center text-light p-2 h4 fw-bold">
           Ishchilar
         </li>
-        {% for doctor in doctors %}
-        <li class="list-group-item doctors_list">
-          <input class="form-check-input me-1" type="checkbox" id="ishchi" />
-          <label class="form-check-label" for="firstCheckbox">
-            <details>
-              <summary>{{ doctor.full_name }}</summary>
-              <ul class="list-group fw-light list-group-flush">
-                {% for staff in staffs %} 
-                {% if staff.doctor.full_name == doctor.full_name %}
-                <li class="list-group-item">{{ staff.full_name }}</li>
-                {% endif %} 
-                {% endfor %}
-              </ul>
-            </details>
-          </label>
+        {% for staff in staffs %}
+        <li class="list-group-item staff_list" >
+          <input class="form-check-input me-1" type="radio" id="{{ staff.pk }}" name="radio"/>
+          <label class="form-check-label" for="{{ staff.pk }}" style="cursor: pointer;">{{staff.full_name }}</label>
         </li>
         {% endfor %}
       </ul>
     </div>
     <div class="col-lg-9">
-      <div class="d-flex justify-content-between flex-wrap mt-5 mt-lg-0">
-        <div class="d-flex">
+
+      <div class="d-flex   flex-wrap ">
+        <div class="d-flex flex-md-nowrap flex-wrap mt-2 ">
           <div class="custom-dropdown big main-color">
             <select id="select">
-              <option selected disabled>MFI</option>
+              <option selected disabled>MFY</option>
               {% for neighborhood in neighborhoods %}    
                 <option>{{ neighborhood.name }}</option>
                 {% endfor %}
             </select>
+          </div>
+          <div class="dropdown mx-md-3">
+            <button
+              class="btn btn-success main-color text-light dropdown-toggle "
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Ko'chalar
+            </button>
+            <ul class="dropdown-menu" id="select2">
+              <!-- <li class="dropdown-item"><input type="checkbox" onclick="selectKocha(event)" value="Action1" id="one"><label for="one">Action1</label></a></li>
+              <li class="dropdown-item"><input type="checkbox" onclick="selectKocha(event)" value="Action2" id="two"><label for="two">Action2</label></a></li>
+              <li class="dropdown-item"><input type="checkbox" onclick="selectKocha(event)" value="Action3" id="three"><label for="three">Action3</label></a></li> -->
+            </ul>
+          </div>
         </div>
-        <div class="custom-dropdown big main-color">
-          <select id="select2">    
-              <!-- pass -->
-              <option selected disabled>Ko'chalar</option>
-          </select>
-      </div>
+        <div class="d-flex flex-md-nowrap flex-wrap mt-2">
+          <input name="date" type="date" class="date-input ms-md-5 my-md-0 my-sm-0" />
+          <button id="showAlert" class="btn btn-success ms-5 save_grafic">
+            Saqlash
+          </button>
         </div>
-        <button id="save_grafic" class="btn btn-success m-2 m-md-0 m-sm-0">Saqlash</button>
       </div>
+
+
+
       <table class="table table-striped mt-5">
         <thead>
           <tr>
+            <th scope="col">Tanlash</th>
             <th scope="col">№</th>
             <th scope="col">F.I.O</th>
             <th scope="col">Address</th>
@@ -70,11 +85,33 @@
 </div>
 
 <script>
+  let arr;
+  let areaSelect = document.querySelector('#select')
+  let areaSelect2 = document.querySelector('#select2')
+  let save_grafic = document.querySelector('.save_grafic')
+  let staff_list = document.querySelectorAll('.staff_list')
+  let alert = document.getElementById('alert')
+  
+  function showAlert(text, color){
+    console.log(color);
+    alert.classList.remove('d-none')
+    alert.classList.add('d-block')
+    document.querySelector('.alert_text').textContent = text
+    setTimeout(() => {
+      alert.classList.remove('d-block')
+      alert.classList.add('d-none')
+    }, 3000)
+  }
+
+  areaSelect.addEventListener('change',(e)=>{
+      getStreets(e.target.value)
+  });
+
   function makeStreetDropdown(data){
     let street = document.querySelector('#select2');
     let context = '';
     for (let i = 0; i < data.length; i++) {
-      context += `<option>${data[i].fields.name}</option>`
+      context += `<li class="dropdown-item"><input type="checkbox" onclick="getAddress()" value="${data[i].fields.slug}" id="${data[i].fields.slug}"> <label for="${data[i].fields.slug}">${data[i].fields.name}</label></a></li>`
     }
     street.innerHTML = context
   }
@@ -82,7 +119,8 @@
     let address = document.querySelector('.address');
     let context = '';
     for (let i = 0; i < data.length; i++) {
-      context += `<tr>
+      context += `<tr onclick="clickedTable(this)" data-address_id="${data[i].pk}">
+              <th scope="row"><input class="address_items" type="checkbox" id="${data[i].pk}"/></th>
               <th scope="row">${i+1}</th>
               <td>${data[i].fields.full_name}</td>
               <td>${data[i].fields.addres_name}</td>
@@ -91,8 +129,18 @@
     }
     address.innerHTML = context
   }
+  function clickedTable(e){
+    let clicktable=e.childNodes[1].childNodes[0]
+    if(clicktable.checked==true){
+      clicktable.checked=false
+    }else{
+      clicktable.checked=true
+    }
+  }
+
+
   function getStreets(e) {
-    console.log(e.target);
+    console.log(e);
     $.ajax({
       url: "{% url 'get_streets' %}",
       type: "get",
@@ -102,11 +150,20 @@
       },
     });
   }
-  function getAddress(e) {
+  function getAddress() {
+    let liKocha=document.querySelectorAll('#select2 li input');
+    arr=[]
+    liKocha.forEach(li=>{
+      let checkedli=li.checked
+      if(checkedli==true){
+        arr.push(li.value)
+      }
+    });
+
     $.ajax({
       url: "{% url 'get_address' %}",
       type: "get",
-      data: { item: e },
+      data: {item: arr},
       success: function (data) {
         makeAddressDropdown(data)
       },
@@ -115,20 +172,38 @@
 
   save_grafic.addEventListener('click', (e) => {
     neighborhood = areaSelect.value
-    street = areaSelect2.value
-    doctors_list.forEach((item) => {
-        if (item.childNodes[1].checked) {            
-            doctor = item.childNodes[3].childNodes[1].childNodes[1].textContent
-            $.ajax({
-              url: "{% url 'save_grafic' %}",
-              type: "get",
-              data: { doctor: doctor, neighborhood: neighborhood, street: street },
-              success: function (data) {
-                console.log(data);
-              },
-            })
+    date = document.querySelector('.date-input').value
+    let address_items = document.querySelectorAll('.address_items');
+    let addresses = []
+    address_items.forEach((item) => {
+      console.log('sasasa');
+      if (item.checked){
+        addresses.push(item.getAttribute('id'))
+      }
+    })
+    staff_list.forEach((item) => {
+        if (item.childNodes[1].checked && neighborhood && date) {            
+            staff = item.textContent.trim()
+            saveGraficData({ staff: staff, date: date, addresses: addresses})
+            showAlert('Saqlandi')
+        } else {
+          showAlert('Xatolik yuz berdi')
         }
+            
+        
     });
 });
+
+
+function saveGraficData(items){
+  $.ajax({
+    url: "{% url 'save_grafic' %}",
+    type: "get",
+    data: items,
+    success: function (data) {
+      console.log(data);
+    },
+  })
+}
 </script>
 {% endblock %}

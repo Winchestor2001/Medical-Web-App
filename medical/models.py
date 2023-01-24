@@ -21,13 +21,6 @@ class Street(models.Model):
         return "{} - {}".format(self.name, self.population)
 
 
-class Doctor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=255)
-    def __str__(self):
-        return "{}".format(self.full_name)
-
-
 class Staff(models.Model):
     CHOISES = (
         ("Врач", "Врач"),
@@ -36,7 +29,6 @@ class Staff(models.Model):
         ("Доя", "Доя"),
         ("Болалар хамшира", "Болалар хамшира"),
     )
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=255)
     rank = models.CharField(max_length=255, choices=CHOISES)
@@ -57,11 +49,13 @@ class Address(models.Model):
 
 
 class Work(models.Model):
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-    staff = models.ManyToManyField(Staff)
-    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
-    street = models.ManyToManyField(Street)
-    date = models.DateField(auto_now_add=True)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    checked = models.BooleanField(default=False)
+    date = models.DateField()
 
     def __str__(self):
-        return "{} - {}".format(self.doctor, self.date)
+        return "{}".format(self.staff)
+    
+    class Meta:
+        ordering = ['date']

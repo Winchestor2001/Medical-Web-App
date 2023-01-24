@@ -1,12 +1,14 @@
+{% load static %}
 <nav class="navbar">
     <div class="container">
-      <a href="{% url 'create_graphic' %}" class="logo fw-bold text-light h3">Medical</a>
+      <a href="{% url 'table' %}" class="logo fw-bold text-light h3">Medical</a>
+      <!-- <a href="{% url 'table' %}" class="logo fw-bold text-light h3"><img class="logo" src="{% static 'img/medical_logo.png' %}" alt="Medical"></a>  -->
       <input type="checkbox" id="toggler" />
-      <label for="toggler"><i class="fa-solid fa-bars-staggered"></i></label>
+      <label for="toggler"><i class="fa-solid fa-bars-staggered text-white"></i></label>
       <div class="menu">
         <ul class="list">
           <li><a href="{% url 'table' %}">Kunlik reja</a></li>
-          <li><a href="#">Jadval</a></li>
+          <li><a href="{% url 'jadval' %}">Jadval</a></li>
           {% if request.user.is_staff %}
           <li><a href="{% url 'create_graphic' %}">Grafik tuzish</a></li>
           {% endif %}

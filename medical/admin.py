@@ -19,11 +19,6 @@ class StaffAdmin(admin.ModelAdmin):
     list_display = ['full_name', 'rank']
 
 
-@admin.register(Doctor)
-class DoctorAdmin(admin.ModelAdmin):
-    list_display = ['full_name']
-
-
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
     list_display = ['addres_name', 'full_name', 'street']
@@ -31,7 +26,7 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(Work)
 class WorkAdmin(admin.ModelAdmin):
-    list_display = ['doctor', 'neighborhood', 'date']
+    list_display = ['staff', 'address', 'checked', 'date']
 
 
 

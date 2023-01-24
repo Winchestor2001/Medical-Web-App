@@ -1,179 +1,287 @@
-{% extends 'base.html' %}
+    {% extends 'base.html' %}
 
+    {% block title %}Jadval{% endblock %} 
 
-{% block title %}Jadval{% endblock %}
-
-
-
-
-
-{% block content %}
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">
-            Tastiqlash oynasi
-          </h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <button class="btn btn-primary mb-3" type="button">Sms kodini yuborish</button>
-            <input class="form-control" type="text" placeholder="Sms kodini kiriting">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            Close
-          </button>
-          <button type="button" class="btn btn-success">Tastiqlash</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    {% block content %}
+<style>
+  * {
+      box-sizing: border-box;
+  }
   
-<div class="container">
-  {% for work in works_day %}
-  {{work.date | date:'l'}}
-  {% endfor %}
-    <h2 class="btn btn-primary fw-bold mt-3">02.01.2023 -> 16.01.2023</h2>
-    <div class="d-flex flex-wrap justify-content-center justify-content-lg-start week mt-2">
-      <div class="day">
-        <h3 class="main-color text-center text-light p-2">Dushanba</h3>
-        <ul class="fw-bold">
-          <li class="list-group-item m-2  btn honadon-kirmadi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            2 mik-6 dom-12 kvartira
+
+  .year2023{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    max-width: 100%;
+  }
+  .calendar {
+      max-width: 100%;
+  }
+  
+  ul {
+      list-style-type: none;
+  }
+  
+  .month {
+      padding: 70px 25px;
+      width: 100%;
+      background-color: #35403e;
+      text-align: center;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+  }
+  
+  .month .prev {
+      float: left;
+      padding-top: 10px;
+      cursor: pointer;
+  }
+  
+  .month .next {
+      float: right;
+      padding-top: 10px;
+      cursor: pointer;
+  }
+  
+  .month ul {
+      margin: 0;
+      padding: 0;
+  }
+  
+  .month ul li {
+      color: white;
+      font-size: 20px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-weight: 900;
+  }
+  
+  .weekdays {
+      margin: 0;
+      padding: 10px 0;
+      background-color: #ddd;
+  }
+  
+  .weekdays li {
+      display: inline-block;
+      width: 12.6%;
+      color: #666;
+      font-size: 30px;
+      text-align: center;
+  }
+  
+  .days {
+      padding: 10px 0;
+      background-color: #eee;
+      margin: 0;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+  }
+  
+  .days li {
+      display: inline-block;
+      width: 13.6%;
+      text-align: center;
+      margin-bottom: 5px;
+      font-size: 28px;
+      color: #777;
+  }
+
+  /* lets add some active class  for current date*/
+  .active{
+      padding: 2px;
+      background-color: #28A745;
+      color: white !important;
+      border-radius: 20px;
+      cursor: pointer;
+  }
+  /*  TO make it responsive lets add some media queries */
+  
+  @media screen and (max-width:720px) {
+      .weekdays li,
+      .days li {
+          width: 13.1%;
+          font-size: 15px;
+      }
+  } 
+  
+  @media screen and (max-width:420px) {
+      .weekdays li,
+      .days li {
+          width: 12.1%;
+      }
+      .days li .active{
+          padding: 2px;
+      }
+  }
+  
+  @media screen and (max-width:290px) {
+      .weekdays li,
+      .days li {
+          width: 12.2%;
+      }
+  }
+</style>
+<div class="year2023">
+  <div class="calendar">
+    <div class="month">
+      <ul>
+          <!-- add previous and next buttons -->
+          <!-- <li class="prev">&#10094;</li>
+          <li class="next">&#10095;</li> -->
+          <li class="month-title">
+              <span class="month-name"></span>
+              <br>
+              <span class="year"></span>
           </li>
-          <li class="list-group-item m-2 btn honadon-kirmadi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Navoi kucha 2-uy
-          </li>
-          <li class="list-group-item m-2 btn honadon-kirdi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Alisher Navoi kucha 122-uy
-          </li>
-          <li class="list-group-item m-2  btn honadon-kirdi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Navoi kucha 52-uy
-          </li>
-          <li class="list-group-item m-2 btn honadon-kirmadi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Alisher Navoi kucha 22-uy
-          </li>
-        </ul>
-      </div>
-      <div class="day">
-        <h3 class="main-color text-center text-light p-2">Seyshanba</h3>
-        <ul class="fw-bold">
-          <li class="list-group-item m-2 btn honadon-kirdi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Navoi kucha 2-uy
-          </li>
-          <li class="list-group-item m-2 btn honadon-kirmadi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Alisher Navoi kucha 22-uy
-          </li>
-          <li class="list-group-item m-2 btn honadon-kirdi text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Navoi kucha 52-uy
-          </li>
-          <li class="list-group-item m-2 btn honadon-kirdi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Alisher Navoi kucha 122-uy
-          </li>
-          <li class="list-group-item m-2 btn honadon-kirmadi" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Alisher Navoi kucha 22-uy
-          </li>
-          <li class="list-group-item m-2 btn honadon-kirdi text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            2 mik-6 dom-12 kvartira
-          </li>
-        </ul>
-      </div>
-      <div class="day">
-        <h3 class="main-color text-center text-light p-2">Chorshanba</h3>
-        <ul class="fw-bold">
-          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Navoi kucha 2-uy
-          </li>
-          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Alisher Navoi kucha 22-uy
-          </li>
-          <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Navoi kucha 52-uy
-          </li>
-          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Alisher Navoi kucha 122-uy
-          </li>
-          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Alisher Navoi kucha 22-uy
-          </li>
-          <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            2 mik-6 dom-12 kvartira
-          </li>
-        </ul>
-      </div>
-      <div class="day">
-        <h3 class="main-color text-center text-light p-2">Chorshanba</h3>
-        <ul class="fw-bold">
-          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Navoi kucha 2-uy
-          </li>
-          <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Alisher Navoi kucha 22-uy
-          </li>
-          <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Navoi kucha 52-uy
-          </li>
-<li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Alisher Navoi kucha 122-uy
-  </li>
-  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Alisher Navoi kucha 22-uy
-  </li>
-  <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    2 mik-6 dom-12 kvartira
-  </li>
-</ul>
+      </ul>
+    </div>
+    <ul class="weekdays">
+      <li>Du</li>
+      <li>Se</li>
+      <li>Ch</li>
+      <li>Pa</li>
+      <li>Ju</li>
+      <li>Sh</li>
+      <li>Ya</li>
+    </ul>
+    
+    <!-- All these values are used to give our calendar a starting design -->
+    
+    <ul class="days">
+    
+    </ul>
+    </div>
 </div>
-<div class="day">
-<h3 class="main-color text-center text-light p-2">Chorshanba</h3>
-<ul class="fw-bold">
-  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Navoi kucha 2-uy
-  </li>
-  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Alisher Navoi kucha 22-uy
-  </li>
-  <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Navoi kucha 52-uy
-  </li>
-  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Alisher Navoi kucha 122-uy
-  </li>
-  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Alisher Navoi kucha 22-uy
-  </li>
-  <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    2 mik-6 dom-12 kvartira
-  </li>
-</ul>
-</div>
-<div class="day">
-<h3 class="main-color text-center text-light p-2">Chorshanba</h3>
-<ul class="fw-bold">
-  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Navoi kucha 2-uy
-  </li>
-  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Alisher Navoi kucha 22-uy
-  </li>
-  <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Navoi kucha 52-uy
-  </li>
-  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Alisher Navoi kucha 122-uy
-  </li>
-  <li class="list-group-item m-2 btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Alisher Navoi kucha 22-uy
-  </li>
-  <li class="list-group-item m-2 btn text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    2 mik-6 dom-12 kvartira
-  </li>
-</ul>
-</div>
-</div>
-</div>
+
+<script>
+  //   now Lets make our calendar dynamic using some javascript
+    let dayList = document.querySelector('.days');
+    let monthName = document.querySelector('.month-name');
+    let yearName = document.querySelector('.year');
+    // let prev = document.querySelector('.prev');
+    // let next = document.querySelector('.next');
+
+    // lets create an Date object
+
+    let dt = new Date();
+    let month = dt.getMonth()+1 //as it will return value between 0-11 so to make it 1-12 we add 1 to it
+    let year = dt.getFullYear();
+    let currentDay = dt.getDate();
+
+    // make an array of month name to map with the month value we obtained using getMonth()
+    let monthNames = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr']
+
+
+    // now lets handle the previous and next button click
+    // prev.addEventListener('click',event=>{
+    //     if(month===1){
+    //         month =12;
+    //         month-=1;
+    //     }else{
+    //         month-=1;
+    //     }
+    //     calendar();
+    // })
+
+    // next.addEventListener('click',event=>{
+    //     if(month===12){
+    //         month =1;
+    //         // month+=1;
+    //     }else{
+    //         month+=1;
+    //     }
+    //     calendar();
+    // })
+  // now lets make a calendar function
+
+  const calendar = ()=>{
+      monthName.innerHTML = monthNames[month-1];
+      yearName.innerHTML = year;
+      dayList.innerHTML = ''
+      
+      daysInMonth = new Date(year, month, 0).getDate(); //get toatl number of days in a particular month
+
+
+      //  but still there is a problem
+      // you can see that for every month the date starts from monday
+      // it should not be as that
+      // date of a new month should start from the next immediate dat from when the previous month ends
+      // so lets match that pattern by adding gaps before the starting of the day in month
+
+      // get day number at which the current month start (0 for sunday, 6 for saturday)
+
+      dayNumber = new Date(year,month-1,1).getDay();
+      let gaps
+      if (dayNumber === 0) {
+          gaps = 6
+      }else{
+          gaps = dayNumber - 1;
+          // Ex:: if it is monday dayNumber = 1, so gaps = 1-1 = 0;
+          // if it is thursdat dayNumber = 4, so gaps = 4-1 = 3;
+      }
+      for(day = -gaps + 1 ;day<=daysInMonth; day++){
+          const days = document.createElement('li');
+          if(day<=0){
+              days.innerHTML = "";
+              dayList.appendChild(days);
+        } else if (day===currentDay&&month===dt.getMonth()+1 && year===dt.getFullYear()){
+            //make this date as active as it is current date i.e. today
+            
+            // days.setAttribute('class','active');
+            days.innerHTML = day;
+            dayList.appendChild(days)
+        }
+        else{
+              days.innerHTML = day;
+              dayList.appendChild(days);
+          }
+      }
+      ajaxGetWorks();
+  }
+
+  // thats it our calendar is ready
+
+  
+function allDays(data){
+    let allDays=document.querySelectorAll('.days li')
+    for(let i=0; i<data.length; i++){
+      let user_day=data[i].fields.date.split("-")[2]
+      console.log(data[i].fields);
+      for(let b=0; b<allDays.length; b++){
+        let calendar_days=allDays[b].textContent
+        if(user_day==calendar_days){
+            allDays[b].setAttribute('class','active');
+            allDays[b].setAttribute('onclick','activeDayClick(this);');
+            // allDays[b].setAttribute('data-url', data[i].pk);
+        }
+      }
+    }
+}
+
+
+function activeDayClick(e){
+    location.replace(`/adresses_work/`)
+}
+
+
+function ajaxGetWorks(){
+    $.ajax({
+        url: "{% url 'get_user_table_works' %}",
+        type: "get",
+        data: { req: `{{ request.user }}` },
+        success: function (data) {
+            // console.log(data);
+            allDays(data)
+            
+        },
+    });
+}
+  </script>
+
+
+
 
 {% endblock %}
