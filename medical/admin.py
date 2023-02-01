@@ -29,5 +29,9 @@ class WorkAdmin(admin.ModelAdmin):
     list_display = ['staff', 'address', 'checked', 'date']
 
 
+@admin.register(SmsCode)
+class SmsCodeAdmin(admin.ModelAdmin):
+    list_display = ['number', 'code', 'date']
+
 
 

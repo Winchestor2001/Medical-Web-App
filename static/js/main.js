@@ -1,7 +1,150 @@
 window.onload = () => {
     preloader = document.querySelector('#preloader');
-    preloader.style.display = 'none';
+    preloader.style.visibility = 'hidden';
+    preloader.style.opacity = 0;
 }
+
+let user=document.getElementById("exampleModalLabel");
+let tableTr=document.querySelectorAll(".tabletr");
+let sendSms=document.getElementById('sendSms');
+let checkSms=document.getElementById('checksms');
+let tastiqlashBtn=document.getElementById('tastiqlashbtn');
+let images;
+let img_count = 0;
+
+
+
+function send_sms(data){
+    checkSms.addEventListener('input',()=>{
+        user_text=checkSms.value
+        if(user_text==data){
+            tastiqlashBtn.disabled = false;
+        }else{
+            tastiqlashBtn.disabled = true;        
+        }
+    })
+}
+
+tableTr.forEach(tr=>{
+    tr.addEventListener('click',()=>{
+        user.textContent=`${tr.childNodes[3].textContent}: ${tr.childNodes[7].textContent}`;
+        send=document.createAttribute('data-send-sms')
+        send.value=tr.childNodes[7].textContent
+        sendSms.setAttributeNode(send)
+    });
+})
+
+function showImg(imgs){
+    images = imgs
+    let img_modal = document.querySelector('.img_modal');
+    img_modal.style.display = 'block';
+    img_modal.innerHTML = `<div class="d-flex justify-content-md-around justify-content-between align-items-center h-100">
+                                <i onclick="img_left_right(event)"  class="fa-solid fa-angle-left fa-2x text-light pointer"></i>
+                                <i onclick="img_left_right(event)"  class="fa-solid fa-angle-right fa-2x text-light pointer"></i>
+                            </div>
+                            <img src="/media/${imgs[0].fields.img}" alt="">
+                            <span class="img_modal_close" onclick="closeImg()" style="display:block;"><i class="fa-solid fa-xmark"></i></span>
+                            `
+    img_modal.style.position = 'absolute';
+}
+
+function img_left_right(e){
+    let img_tag = document.querySelector('.img_modal img');
+    if(e.target.classList.contains('fa-angle-left')){
+        img_count--
+        if(img_count<0){
+            img_count=images.length-1
+            img_tag.src='/media/' + images[img_count].fields.img
+        } else{
+            img_tag.src='/media/' + images[img_count].fields.img
+        }
+    } else{
+        img_count++
+        if(img_count>images.length-1){
+            img_count=0
+            img_tag.src='/media/' + images[0].fields.img
+        } else{
+            img_tag.src='/media/' + images[img_count].fields.img
+        }
+    }
+}
+
+
+function closeImg(){
+    document.querySelector('.img_modal').style.display = 'none'
+}
+
+
+function graficPageRankFilter(e){
+    let list_group_ranks = document.querySelectorAll('.list-group-item');
+    list_group_ranks.forEach((item) => {
+        item.style.display = 'block'
+        if (item.dataset.rank && item.dataset.rank != e.target.value) {
+            item.style.display = 'none'
+        }
+        if (e.target.value == 'all'){
+            item.style.display = 'block'
+        }
+    })
+}
+
+
+function jadvalDateFilter(e){
+    let date = 'no'
+    if (e.target.value){
+        date = e.target.value
+    }
+    jadvalFiltering(null, null, date)
+}
+function jadvalNameFilter(e){
+    jadvalFiltering(e.target.value, null, null)
+}
+function jadvalRankFilter(e){
+    jadvalFiltering(null, e.target.value, null)
+}
+
+
+function jadvalFiltering(name, rank, date){
+    let jadval_table = document.querySelectorAll('.jadval_items')
+    if (name){
+        jadval_table.forEach((item) => {
+            item.classList.remove('d-none')
+            if (item.childNodes[2].textContent.match(name)) {
+                item.classList.remove('d-none')
+            } else{
+                item.classList.add('d-none')
+            }
+        })
+    } else if (rank){
+        jadval_table.forEach((item) => {
+            item.classList.remove('d-none')
+            if(rank=='all'){
+                item.classList.remove('d-none')
+            }else if (item.childNodes[4].textContent.match(rank)){
+                item.classList.remove('d-none')
+            }else{
+                item.classList.add('d-none')
+            }
+            
+        })
+        
+    } else if (date){
+        jadval_table.forEach((item) => {
+            item.classList.remove('d-none')
+            if (date == 'no'){
+                item.classList.remove('d-none')
+            }else if (Date.parse(item.childNodes[11].textContent) != Date.parse(date)) {
+                item.classList.add('d-none')
+            }
+        })
+    }
+}
+
+
+
+
+
+
 
 
 //   now Lets make our calendar dynamic using some javascript

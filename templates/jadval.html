@@ -1,48 +1,105 @@
 {% extends 'base.html' %}
-
+{% load custop_template_filters %}
 {% block title %}Jadval{% endblock %} 
 
 {% block content %}
 
-<div class="container">
-    <table class="table mt-3">
-    <thead>
-        <tr>
-          <th scope="col">№</th>
-          <th scope="col">F.I.O</th>
-          <th scope="col">Lavozim</th>
-          <th scope="col"><i class="fa-solid fa-check text-success"></i>/<i class="fa-solid fa-xmark text-danger"></i></th>
-          <th scope="col">%</th>
-          <th scope="col">Sana</th>
-          </th>
-        </tr>
-      </thead>
+<div class="container container-fluid">
 
-        <tbody class="address">
+  <div  class="filter row mt-4">
+   <div class="col-12 col-md-4">
+    <label for="filter_search">Ism</label>
+    <input oninput="jadvalNameFilter(event);" type="text" class="form-control" name="" placeholder="Search" id="filter_search">
+    </div>
+    <div class="col-12 col-md-4">
+      <label for="select">Lavozim</label>
+      <select onchange="jadvalRankFilter(event);" name="" class="form-select" id="select">
+        <option selected value="all">Barchasi</option>
+          <option value="Врач">Врач</option>
+          <option value="Оилавий хамшира">Оилавий хамшира</option>
+          <option value="Умумий амалий хамшира">Умумий амалий хамшира</option>
+          <option value="Доя">Доя</option>
+          <option value="Болалар хамшира">Болалар хамшира</option>
+      </select>
+    </div>
+    <div class="col-12 col-md-4">
+      <label for="date">Sana</label>
+      <input onchange="jadvalDateFilter(event);" id="date" class="form-control" name="" placeholder="date" type="date">
+    </div>
+  </div>
+
+   <div class="scroll-table">
+    <table class="table jadval mt-3">
+      <thead>
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">F.I.O</th>
+            <th scope="col">Lavozim</th>
+            <th scope="col">Manzil</th>
+            <th scope="col"><span class="d-flex"><i class="fa-solid fa-check text-success"></i> <i class="fa-solid fa-xmark text-danger"></i></span></th>
+            <th scope="col">%</th>
+            <th scope="col">Sana</th>
+            <th scope="col">Rasm</th>
             
-            {% for work in works %}
-            <tr data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor: pointer;">
-                <td scope="row">{{ forloop.counter }}</th>
-                <td>{{work.0.staff.full_name}}</td>
-                <td>{{work.0.staff.rank}}</th>
-                <td>
-                  {% if work.checked %}
-                  0/{{work|length}}
+          </tr>
+        </thead>
+  
+          <tbody class="address">
+              
+              {% for work in works %}
+              <tr data-bs-toggle="modal" data-bs-target="#exampleModal" class="jadval_items ">
+                  <td scope="row">{{ forloop.counter }}</th>
+                  <td>{{work.0.0.staff.full_name}}</td>
+                  <td>{{work.0.0.staff.rank}}</th>
+                  <td> 
+                    <div class="dropdown1">
+                      <span>Ko`chalar</span>
+                      <div class="dropdown-content">
+                        {% for address in work.2 %}
+                        <p>{{ address }}</p>
+                        {% endfor %}
+                      </div>
+                    </div>
+        
+                  </td>
+                  <td>
+                    {{ work.1 }}/{{work.0|length}}
+                  </td>
+                  <td>{{ work.0.0.staff|prosent}}%</td>
+                  <td>{{ work.0.0.date | date:'Y-m-d' }}</td>
+                  {% if work.0.0.img %}
+                  <td><img onclick="ajaxGetStaffsImg(event);" class="smoll_img" data-staff="{{ work.0.0.staff.full_name }}" src="/media/{{ work.0.0.img }}" alt=""></td>
                   {% else %}
-                  0/{{work|length}}
+                  <td><i class="fa-solid fa-ban fa-2x text-center text-danger"></i></td>
                   {% endif %}
-                </td>
-                <td>50%</td>
-                <td>{{ work.0.date | date:'Y-m-d' }}</td>
-            </tr>
-            {% endfor %}
-            
-        </tbody>
+              </tr>
+              {% endfor %}
+              
+          </tbody>
+  
+         
+  
+      </table>
+   </div>
 
-       
-
-</table>
+  <div class="img_modal">
+    
+    
+  </div>
 </div>
 
 
+<script>
+  function ajaxGetStaffsImg(e){
+    $.ajax({
+      url: "{% url 'get_staff_imgs' %}",
+      type: "get",
+      data: {staff: e.target.dataset.staff},
+      success: function (data){
+        showImg(data);
+        
+      }
+    });
+  }
+</script>
 {% endblock %}

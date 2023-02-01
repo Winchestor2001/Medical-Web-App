@@ -14,7 +14,7 @@
     <div class="shape"></div>
     <div class="shape"></div>
 </div>
-<form method="post" class="login_form">
+<form method="post" class="login_form p-4">
     {% csrf_token %}
     <h3>Medical</h3>
 
@@ -25,7 +25,7 @@
     <input class="login_input" type="password" placeholder="Password" name="password" id="password" required><br>
 
     <button type="submit">Kirish</button>
-    <div class="alert alert-{{ col }} mt-4" role="alert">
+    <div class="alert alert-{{ col }} mt-3 text-dark text-center" role="alert">
         {{ message }}
     </div>
 </form>

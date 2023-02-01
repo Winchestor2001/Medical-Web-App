@@ -249,7 +249,7 @@ function allDays(data){
     let allDays=document.querySelectorAll('.days li')
     for(let i=0; i<data.length; i++){
       let user_day=data[i].fields.date.split("-")[2]
-      console.log(data[i].fields);
+    //   console.log(data[i].fields);
       for(let b=0; b<allDays.length; b++){
         let calendar_days=allDays[b].textContent
         if(user_day==calendar_days){
@@ -259,11 +259,14 @@ function allDays(data){
         }
       }
     }
+    preloader = document.querySelector('#preloader');
+    preloader.style.visibility = 'hidden';
+    preloader.style.opacity = 0;
 }
 
 
 function activeDayClick(e){
-    location.replace(`/adresses_work/`)
+    location.replace(`/adresses_work/${year}-${month}-${e.textContent}`)
 }
 
 

@@ -16,7 +16,11 @@
             </tr>
             <tbody class="address">
               {% for address in addresses %}
-                <tr data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor: pointer;">
+              {% if address.checked %}
+                <tr>
+                {% else %}
+                <tr class="tabletr" onclick="getWorkDate(this);" data-date="{{ address.date|date:'Y-m-d' }}" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor: pointer;">
+                  {% endif %}
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{address.address.full_name}}</td>
                     <td>{{address.address.addres_name}}</td>
@@ -36,15 +40,17 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">Tastiqlasj oynasi</h1>
+                      <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <button class="btn btn-primary mb-2">Sms Yuborish</button>
-                        <input class="form-control" type="text" placeholder="Sms kod">
+                        <button class="btn btn-primary mb-2" onclick="send_sms_ajax(this)" id="sendSms">Sms Yuborish</button>
+                        <input class="form-control mb-2" type="number" id="checksms" placeholder="Sms kod">
+                        <button class="btn btn-outline-info" onclick="input_img_func();">Rasimni yuklash</button>
+                        <input onchange="input_img_change();" class="form-control" id="input_img" type="file" hidden>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-primary">Tastiqlash</button>
+                      <button type="button" onclick="tastiqlashbtn()" id="tastiqlashbtn" disabled class="btn btn-success">Tastiqlash</button>
                     </div>
                   </div>
                 </div>
@@ -53,6 +59,51 @@
     </table>
 </div>
 
+<script>
+let work_date;
+let input_img = document.querySelector('#input_img');
+let upload_img;
 
+function getWorkDate(e){
+  work_date = e.dataset.date
+}
+
+function input_img_func(){
+  input_img.click()
+}
+function input_img_change(){
+  const file = input_img.files[0];
+  const reader = new FileReader();
+  reader.onloadend = function() {
+    upload_img = reader.result;
+  }
+  reader.readAsDataURL(file);
+}
+
+function send_sms_ajax(e){
+  $.ajax({
+        url: "{% url 'send_sms' %}",
+        type: "get",
+        data: { number: e.dataset.sendSms },
+        success: function (data) {
+            console.log(data);
+            send_sms(data);
+        },
+    });
+}
+
+function tastiqlashbtn(){
+  let sendSms=document.getElementById('sendSms');
+  $.ajax({
+        url: "{% url 'correct_sms_code' %}",
+        type: "post",
+        data: { code: sendSms.dataset.sendSms, user: `{{ request.user.username }}`, date: work_date, img: upload_img },
+        success: function (data) {
+            location.reload()
+        },
+    });
+}
+
+</script>
 
 {% endblock %}

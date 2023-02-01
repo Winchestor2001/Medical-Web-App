@@ -12,15 +12,25 @@
 </div>
 
 
-<div class="container container-sm">
+<div class="container-md">
   <div class="row mt-3">
     <div class="col-lg-3 border-end">
       <ul class="list-group main-color fw-bold">
         <li class="list-group text-center text-light p-2 h4 fw-bold">
-          Ishchilar
+          Ishchi xodimlarning umumiy ro'yxati
+        </li>
+        <li class="list-group-item">
+          <select name="" class="form-select" id="" onchange="graficPageRankFilter(event)">
+            <option selected value="all">Barchasi</option>
+            <option value="Врач">Врач</option>
+            <option value="Оилавий хамшира">Оилавий хамшира</option>
+            <option value="Умумий амалий хамшира">Умумий амалий хамшира</option>
+            <option value="Доя">Доя</option>
+            <option value="Болалар хамшира">Болалар хамшира</option>
+          </select>
         </li>
         {% for staff in staffs %}
-        <li class="list-group-item staff_list" >
+        <li class="list-group-item staff_list" data-rank="{{ staff.rank }}">
           <input class="form-check-input me-1" type="radio" id="{{ staff.pk }}" name="radio"/>
           <label class="form-check-label" for="{{ staff.pk }}" style="cursor: pointer;">{{staff.full_name }}</label>
         </li>
@@ -65,13 +75,13 @@
 
 
 
-      <table class="table table-striped mt-5">
+      <table class="table jadval table-striped mt-5">
         <thead>
           <tr>
             <th scope="col">Tanlash</th>
             <th scope="col">№</th>
             <th scope="col">F.I.O</th>
-            <th scope="col">Address</th>
+            <th scope="col">Manzil</th>
             <th scope="col">Tel.raqam</th>
           </tr>
         </thead>
@@ -92,8 +102,7 @@
   let staff_list = document.querySelectorAll('.staff_list')
   let alert = document.getElementById('alert')
   
-  function showAlert(text, color){
-    console.log(color);
+  function showAlert(text){
     alert.classList.remove('d-none')
     alert.classList.add('d-block')
     document.querySelector('.alert_text').textContent = text
@@ -140,7 +149,6 @@
 
 
   function getStreets(e) {
-    console.log(e);
     $.ajax({
       url: "{% url 'get_streets' %}",
       type: "get",
@@ -176,7 +184,6 @@
     let address_items = document.querySelectorAll('.address_items');
     let addresses = []
     address_items.forEach((item) => {
-      console.log('sasasa');
       if (item.checked){
         addresses.push(item.getAttribute('id'))
       }
